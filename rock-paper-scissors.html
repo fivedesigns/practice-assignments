@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rock Paper Scissors</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-md-12">
+        <h1 style="color: red;">Rock Paper Scissors Game</h1>
+        <p>Unit 1: assignment by Sheikh Muhammad Ali Rizwan</p> 
+
+        <button id="btnRock" class="btn btn-default" onclick="userSelection(event)" value="Rock">Rock</button>
+        <button id="btnPaper" class="btn btn-default" onclick="userSelection(event)" value="Paper">Paper</button>
+        <button id="btnScissors" class="btn btn-default" onclick="userSelection(event)" value="Scissors">Scissors</button>
+      </div>
+  
+      <div class="col-md-6">
+        <h2>Your Choice</h2>
+        <div id="userSelection" class="title-style"></div>
+      </div>
+
+      <div class="col-md-6">
+        <h2>Computer Choice</h2>
+        <div id="computerSelection" class="title-style"></div>
+      </div>
+
+      <div class="col-md-12 message-style">
+        <p id="roundCounter" class="counter-style"></p>
+        <p class="blink-me" id="messageID"></p>
+      </div>
+    </div>
+    
+    <script>
+      let arrRPS
+      let userChoice
+      let computerSelection
+      let userScore = 0
+      let computerScore = 0
+      let roundCounter = 0
+
+      // Computer Selection
+      function computerPlay () {
+        arrRPS = ['Rock', 'Paper', 'Scissors']
+        computerSelection = arrRPS[Math.floor(Math.random() * arrRPS.length)]
+      }
+
+      // User Selection
+      function userSelection (event) {
+        userChoice = event.srcElement.innerHTML
+
+        computerPlay()
+        gameCount()
+
+        if (roundCounter <= 5) {
+          playRound(userChoice, computerSelection)
+        } else {
+          if (userScore > computerScore) {
+            document.getElementById('messageID').innerHTML = `G A M E  O V E R... <br> YOU WON<br>You ${userScore} / Computer ${computerScore}`
+          } else {
+            document.getElementById('messageID').innerHTML = `G A M E  O V E R... <br> COMPUTER WON<br>Computer ${computerScore} / You ${userScore}`
+          }
+        }
+      }
+
+      function playRound (userChoice, computerSelection) {
+        document.getElementById('userSelection').innerHTML = userChoice
+        document.getElementById('computerSelection').innerHTML = computerSelection
+        document.getElementById('roundCounter').innerHTML = `ROUND NO. ${roundCounter}`
+
+        const rockBeatsScissors = (userChoice === 'Rock' && computerSelection === 'Scissors')
+        const paperBeatsRock = (userChoice === 'Paper' && computerSelection === 'Rock')
+        const scissorsBeatsPaper = (userChoice === 'Scissors' && computerSelection === 'Paper')
+        const scissorsLosesToRock = (userChoice === 'Scissors' && computerSelection === 'Rock')
+        const rockLosesToPaper = (userChoice === 'Rock' && computerSelection === 'Paper')
+        const paperLosesToScissors = (userChoice === 'Paper' && computerSelection === 'Scissors')
+
+        if (userChoice === computerSelection) {
+          document.getElementById('messageID').innerHTML = "It's a draw"
+        } else if (rockBeatsScissors || paperBeatsRock || scissorsBeatsPaper) {
+          userScore++
+          document.getElementById('messageID').innerHTML = `You won! - score is ${userScore}`
+        } else if (scissorsLosesToRock || rockLosesToPaper || paperLosesToScissors) {
+          computerScore++
+          document.getElementById('messageID').innerHTML = `Computer Won! - score is ${computerScore}`
+        }
+      }
+
+      function gameCount () {
+        roundCounter++
+        console.log(`Count is: ${roundCounter}`)
+      }
+    </script>
+  </body>
+</html>
