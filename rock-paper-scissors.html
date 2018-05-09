@@ -6,44 +6,16 @@
     <title>Rock Paper Scissors</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      .message-style{
-        margin-top: 40px; 
-        padding: 30px; 
-        border: 20px solid red; 
-        text-align: center;
-      }
-      .title-style{
-        font-size: 150%; 
-        text-decoration: underline;
-      }
-      .blink-me {
-        font-size: 4em;
-        animation: blinker 1s linear infinite;
-        color: red;
-      }
-      .counter-style{
-        text-align: center;
-        font-size: 70px;
-        color: blueviolet;
-        border-radius: 40px;
-        border: 10px dashed blueviolet;
-        margin: 10px 0 0;
-      }
-      @keyframes blinker {
-        50% {
-          opacity: 0.5;
-        }
-      }
-    </style>
+
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="container">
       <div class="col-md-12">
         <h1 style="color: red;">Rock Paper Scissors Game</h1>
         <p>Unit 1: assignment by Sheikh Muhammad Ali Rizwan</p> 
+
         <button id="btnRock" class="btn btn-default" onclick="userSelection(event)" value="Rock">Rock</button>
         <button id="btnPaper" class="btn btn-default" onclick="userSelection(event)" value="Paper">Paper</button>
         <button id="btnScissors" class="btn btn-default" onclick="userSelection(event)" value="Scissors">Scissors</button>
@@ -51,76 +23,79 @@
   
       <div class="col-md-6">
         <h2>Your Choice</h2>
-        <div id="UserDiv" class="title-style"></div>
+        <div id="userSelection" class="title-style"></div>
       </div>
+
       <div class="col-md-6">
         <h2>Computer Choice</h2>
-        <div id="ComputerDiv" class="title-style"></div>
+        <div id="computerSelection" class="title-style"></div>
       </div>
+
       <div class="col-md-12 message-style">
-          <p id="counter" class="counter-style"></p>
+        <p id="roundCounter" class="counter-style"></p>
         <p class="blink-me" id="messageID"></p>
       </div>
     </div>
+    
     <script>
-      let arrRPS,
-      userChoice,
-      computerSelection,
-      userscore = 0, 
-      computerscore = 0,
-      count = 0
+      let arrRPS
+      let userChoice
+      let computerSelection
+      let userScore = 0
+      let computerScore = 0
+      let roundCounter = 0
 
-      //Computer Selection 
+      // Computer Selection
       function computerPlay () {
-        arrRPS = ["Rock", "Paper", "Scissors"]  
-        computerSelection = arrRPS[Math.floor(Math.random()*arrRPS.length)]   
+        arrRPS = ['Rock', 'Paper', 'Scissors']
+        computerSelection = arrRPS[Math.floor(Math.random() * arrRPS.length)]
       }
 
-      //User Selection 
-      function userSelection(event) {
+      // User Selection
+      function userSelection (event) {
         userChoice = event.srcElement.innerHTML
+
         computerPlay()
         gameCount()
-        if(count <= 5){
-          playRound(userChoice, computerSelection)
-        }
-        else{
-          if (userscore > computerscore) {
-            document.getElementById('messageID').innerHTML = `G A M E  O V E R... <br> YOU WON<br>You ${userscore} / Computer ${computerscore}`  
-          }
-          else{
-            document.getElementById('messageID').innerHTML = `G A M E  O V E R... <br> COMPUTER WON<br>Computer ${computerscore} / You ${userscore}`
-          }
-          
-        }
-        
-      }
-      
-      function playRound(userChoice, computerSelection) {
-        //string interpolation
-        console.log(`${userChoice} - ${computerSelection}`)
-        
-        document.getElementById('UserDiv').innerHTML = userChoice
-        document.getElementById('ComputerDiv').innerHTML = computerSelection
-        document.getElementById('counter').innerHTML = `ROUND NO. ${count}`
 
-        if (userChoice === "Rock" && computerSelection === "Rock" || userChoice === "Paper" && computerSelection === "Paper" || userChoice === "Scissors" && computerSelection === "Scissors") {
-          console.log("it's a draw")
+        if (roundCounter <= 5) {
+          playRound(userChoice, computerSelection)
+        } else {
+          if (userScore > computerScore) {
+            document.getElementById('messageID').innerHTML = `G A M E  O V E R... <br> YOU WON<br>You ${userScore} / Computer ${computerScore}`
+          } else {
+            document.getElementById('messageID').innerHTML = `G A M E  O V E R... <br> COMPUTER WON<br>Computer ${computerScore} / You ${userScore}`
+          }
+        }
+      }
+
+      function playRound (userChoice, computerSelection) {
+        document.getElementById('userSelection').innerHTML = userChoice
+        document.getElementById('computerSelection').innerHTML = computerSelection
+        document.getElementById('roundCounter').innerHTML = `ROUND NO. ${roundCounter}`
+
+        const rockBeatsScissors = (userChoice === 'Rock' && computerSelection === 'Scissors')
+        const paperBeatsRock = (userChoice === 'Paper' && computerSelection === 'Rock')
+        const scissorsBeatsPaper = (userChoice === 'Scissors' && computerSelection === 'Paper')
+        const scissorsLosesToRock = (userChoice === 'Scissors' && computerSelection === 'Rock')
+        const rockLosesToPaper = (userChoice === 'Rock' && computerSelection === 'Paper')
+        const paperLosesToScissors = (userChoice === 'Paper' && computerSelection === 'Scissors')
+
+        if (userChoice === computerSelection) {
           document.getElementById('messageID').innerHTML = "It's a draw"
-        } else if (userChoice === "Rock" && computerSelection === "Scissors" || userChoice === "Paper" && computerSelection === "Rock" || userChoice === "Scissors" && computerSelection === "Paper") {
-          userscore++
-          console.log(`You won! - score is ${userscore}`)
-          document.getElementById('messageID').innerHTML = `You won! - score is ${userscore}`
-        } else if (userChoice === "Scissors" && computerSelection === "Rock" || userChoice === "Rock" && computerSelection === "Paper" || userChoice === "Paper" && computerSelection === "Scissors") {
-          computerscore++
-          console.log(`Computer Won! - score is ${computerscore}`)
-          document.getElementById('messageID').innerHTML = `Computer Won! - score is ${computerscore}`
-        }   
+        } else if (rockBeatsScissors || paperBeatsRock || scissorsBeatsPaper) {
+          userScore++
+          document.getElementById('messageID').innerHTML = `You won! - score is ${userScore}`
+        } else if (scissorsLosesToRock || rockLosesToPaper || paperLosesToScissors) {
+          computerScore++
+          document.getElementById('messageID').innerHTML = `Computer Won! - score is ${computerScore}`
+        }
       }
-      function gameCount() {
-        count=count+1
-        console.log(`Count is: ${count}`)
+
+      function gameCount () {
+        roundCounter++
+        console.log(`Count is: ${roundCounter}`)
       }
-    </script> 
+    </script>
   </body>
 </html>

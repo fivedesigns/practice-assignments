@@ -1,0 +1,32 @@
+.message-style{
+  margin-top: 40px; 
+  padding: 30px; 
+  border: 20px solid red; 
+  text-align: center;
+}
+
+.title-style{
+  font-size: 150%; 
+  text-decoration: underline;
+}
+
+.blink-me {
+  font-size: 4em;
+  animation: blinker 1s linear infinite;
+  color: red;
+}
+
+.counter-style{
+  text-align: center;
+  font-size: 70px;
+  color: blueviolet;
+  border-radius: 40px;
+  border: 10px dashed blueviolet;
+  margin: 10px 0 0;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.5;
+  }
+}
